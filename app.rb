@@ -2,6 +2,8 @@ require "sinatra"
 require 'koala'
 require 'open-uri'
 
+
+
 enable :sessions
 set :raise_errors, false
 set :show_exceptions, false
@@ -94,6 +96,12 @@ get "/profile_photo" do
 
   content_type 'image/jpg'
   open(profile_pic["source"])
+end
+
+post "/upload" do
+  File.open('upload.png', 'w') do |f|
+    f.write(Base64.decode64(request.body.read.gsub(/data:image\/png;base64,/, "")))
+  end
 end
 
 # used by Canvas apps - redirect the POST to be a regular GET
