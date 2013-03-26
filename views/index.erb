@@ -130,16 +130,29 @@
     <header class="clearfix">
       <% if @user %>
         <canvas id="imageCanvas"></canvas> 
-        <button id=post />Post</button>
+        <div>
+          <button id=post />Equalize my Profile Picture</button>
+        </div>
+  
+        <style>
+          #post {
+            height: 3em;
+          }
+        </style>
+          
+
         <script>
             var canvas = document.getElementById('imageCanvas');
             var ctx = canvas.getContext('2d');
+
+
             img = new Image();
             img.onload = function(){
                 ctx.globalAlpha = 0.2;
                 var lesser = Math.min(img.width, img.height)
                 canvas.width = lesser;
                 canvas.height = lesser;
+                $('#post').css('width', canvas.width)
                 ctx.drawImage(img,0,0);
                 equals = new Image();
                 equals.onload = function() {
@@ -158,8 +171,14 @@
                 type: "POST",
                 url: '/upload', 
                 data: canvas.toDataURL(),
-                processData: false
-              })
+                processData: false,
+                success: function(response) {
+                  FB.api(response, function(r) {
+                    window.location.replace(r.link+"&makeprofile=1");
+                  })
+                }
+              }
+              )
             })
         </script>
 

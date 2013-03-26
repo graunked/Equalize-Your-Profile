@@ -99,9 +99,9 @@ get "/profile_photo" do
 end
 
 post "/upload" do
-  File.open('upload.png', 'w') do |f|
-    f.write(Base64.decode64(request.body.read.gsub(/data:image\/png;base64,/, "")))
-  end
+  @graph  = Koala::Facebook::API.new(access_token)
+  strio = StringIO.open(Base64.decode64(request.body.read.gsub(/data:image\/png;base64,/, "")))
+  @graph.put_picture(strio, 'image/png')["id"]
 end
 
 # used by Canvas apps - redirect the POST to be a regular GET
