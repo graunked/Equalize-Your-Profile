@@ -1,5 +1,6 @@
 require "sinatra"
 require 'koala'
+require 'open-uri'
 
 enable :sessions
 set :raise_errors, false
@@ -67,21 +68,32 @@ end
 
 get "/" do
   # Get base API Connection
+  access_token = session[:access_token]
   @graph  = Koala::Facebook::API.new(access_token)
 
   # Get public details of current application
   @app  =  @graph.get_object(ENV["FACEBOOK_APP_ID"])
 
-  if access_token
-    @user    = @graph.get_object("me")
-    @friends = @graph.get_connections('me', 'friends')
-    @photos  = @graph.get_connections('me', 'photos')
-    @likes   = @graph.get_connections('me', 'likes').first(4)
+  @user    = @graph.get_object("me")
+  @friends = @graph.get_connections('me', 'friends')
+  @photos  = @graph.get_connections('me', 'photos')
+  @albums = @graph.get_connections('me', 'albums')
+  @likes   = @graph.get_connections('me', 'likes').first(4)
 
-    # for other data you can always run fql
-    @friends_using_app = @graph.fql_query("SELECT uid, name, is_app_user, pic_square FROM user WHERE uid in (SELECT uid2 FROM friend WHERE uid1 = me()) AND is_app_user = 1")
-  end
+  profiles = @albums.select{ |album| album["name"] == 'Profile Pictures'}.first
+  @profile_pic = @graph.get_object(profiles["cover_photo"])
+
   erb :index
+end
+
+get "/profile_photo" do
+  @graph  = Koala::Facebook::API.new(access_token)
+  @albums = @graph.get_connections('me', 'albums')
+  profiles = @albums.select{ |album| album["name"] == 'Profile Pictures'}.first
+  profile_pic = @graph.get_object(profiles["cover_photo"])
+
+  content_type 'image/jpg'
+  open(profile_pic["source"])
 end
 
 # used by Canvas apps - redirect the POST to be a regular GET
