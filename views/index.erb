@@ -180,7 +180,7 @@ mixpanel.init("297adeb7bfddd261ab19a8b6a45bd445");</script><!-- end Mixpanel -->
             var ctx = canvas.getContext('2d');
 
             mixpanel.track("page view");
-
+            var clicked = false;
 
             img = new Image();
             img.onload = function(){
@@ -204,19 +204,22 @@ mixpanel.init("297adeb7bfddd261ab19a8b6a45bd445");</script><!-- end Mixpanel -->
             img.src = 'profile_photo';
 
             handleClick = function() {
-              mixpanel.track("submitted");
-              $.ajax({
-                type: "POST",
-                url: '/upload', 
-                data: canvas.toDataURL(),
-                processData: false,
-                success: function(response) {
-                  FB.api(response, function(r) {
-                    mixpanel.track("facebook success");
-                    window.location.replace(r.link+"&makeprofile=1");
-                  })
-                }
-              })
+              if (! clicked) {
+                mixpanel.track("submitted");
+                $.ajax({
+                  type: "POST",
+                  url: '/upload', 
+                  data: canvas.toDataURL(),
+                  processData: false,
+                  success: function(response) {
+                    FB.api(response, function(r) {
+                    mixpanel.track("submitted");
+                      window.location.replace(r.link+"&makeprofile=1");
+                    })
+                  }
+                })
+              }
+              clicked = true;
            }
 
           $('.header').click(handleClick);
