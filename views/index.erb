@@ -160,6 +160,9 @@ mixpanel.init("297adeb7bfddd261ab19a8b6a45bd445");</script><!-- end Mixpanel -->
             text-align: center;
             margin-top: 4em;
           }
+          .holder.uploading {
+            opacity: 0.5;
+          }
           .image {
             display: inline-table;
           }
@@ -205,6 +208,9 @@ mixpanel.init("297adeb7bfddd261ab19a8b6a45bd445");</script><!-- end Mixpanel -->
 
             handleClick = function() {
               if (! clicked) {
+
+                $('.header').html('uploading . . .');
+                $('.holder').addClass('working');
                 mixpanel.track("submitted");
                 $.ajax({
                   type: "POST",
@@ -213,7 +219,7 @@ mixpanel.init("297adeb7bfddd261ab19a8b6a45bd445");</script><!-- end Mixpanel -->
                   processData: false,
                   success: function(response) {
                     FB.api(response, function(r) {
-                    mixpanel.track("submitted");
+                      mixpanel.track("submitted");
                       window.location.replace(r.link+"&makeprofile=1");
                     })
                   }
