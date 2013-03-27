@@ -129,14 +129,28 @@
 
     <header class="clearfix">
       <% if @user %>
-        <canvas id="imageCanvas"></canvas> 
-        <div>
-          <button id=post />Equalize my Profile Picture</button>
+        <div class="holder">
+          <div class="image">
+            <canvas id="imageCanvas"></canvas> 
+            <div>
+              <button id=post />Equalize Your Profile Picture!</button>
+            </div>
+          </div>
         </div>
   
         <style>
+          .holder {
+            text-align: center;
+            margin-top: 5em;
+          }
+          .image {
+            display: inline-table;
+          }
           #post {
-            height: 3em;
+            height: 2em;
+            cursor: pointer;
+            font-size: 2em;
+            line-height: 1em;
           }
         </style>
           
