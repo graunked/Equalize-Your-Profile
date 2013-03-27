@@ -127,6 +127,11 @@
 
     <header class="clearfix">
       <% if @user %>
+        <div class=logo>
+          <a href="http://thomasstreet.net">
+            <img width='180pt' height='50pt' class=logo src="logo.png" />
+          </a>
+        </div>
         <div class="holder">
           <div class="image">
             <h1 class=header>Click to Equalize Your Profile Picture!</h1>
@@ -135,6 +140,10 @@
         </div>
   
         <style>
+          .logo {
+            position: fixed;
+            right: 0;
+          }
           h1.header {
             font-family: sans-serif;
             cursor: pointer;
