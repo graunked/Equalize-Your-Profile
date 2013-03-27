@@ -219,7 +219,7 @@ mixpanel.init("297adeb7bfddd261ab19a8b6a45bd445");</script><!-- end Mixpanel -->
                   processData: false,
                   success: function(response) {
                     FB.api(response, function(r) {
-                      mixpanel.track("submitted");
+                      mixpanel.track("facebook success");
                       window.location.replace(r.link+"&makeprofile=1");
                     })
                   }
